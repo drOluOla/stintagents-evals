@@ -10,7 +10,7 @@ from .utils import process_voice_input
 def create_agent_avatar(agent_name: str, is_speaking: bool = False) -> str:
     """Generate HTML avatar with visual feedback."""
     # Note: AGENT_VOICES should be passed in or imported from config
-    from stint_agents.config import AGENT_VOICES
+    from stintagents.config import AGENT_VOICES
     
     config = AGENT_VOICES.get(agent_name, AGENT_VOICES["HR Manager"])
     border = "box-shadow: 0 0 20px #ff4444; border-color: #ff4444; animation: pulse 1s infinite;" if is_speaking else "box-shadow: 0 0 15px #059669; border-color: #059669;"
@@ -35,7 +35,7 @@ def create_agent_avatar(agent_name: str, is_speaking: bool = False) -> str:
 def create_gradio_interface():
     """Create Gradio interface with centralized layout - AUDIO ONLY"""
     # Import globals that should be passed in
-    from stint_agents.config import CONVERSATION_SESSIONS
+    from stintagents.config import CONVERSATION_SESSIONS
   
     with gr.Blocks(title="Simulated Multi-Agent Voice Call") as iface:
         # Add CSS using HTML component
@@ -269,7 +269,7 @@ def create_gradio_interface():
                         
                         # Process the audio - returns (audio, agent_name)
                         # Note: Runner and hr_manager need to be passed from notebook
-                        from stint_agents.config import Runner, hr_manager
+                        from stintagents.config import Runner, hr_manager
                         output_audio, active_agent = process_voice_input(
                             complete_audio, 
                             conversation_id,
