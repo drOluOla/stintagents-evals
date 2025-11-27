@@ -5,7 +5,7 @@ Evaluate their performance against expected behaviours and test them for safety,
 
 As AI reshapes the labour market and as future-of-work trends indicate that AI will augment human capabilities through collaboration, a critical question emerges. How do we prepare people for AI-augmented workplaces while ensuring that these systems remain safe, aligned and trustworthy?
 
-![alt text](stintagents-demo.png)
+![alt text](stintagents-demo-ui.png)
 
 StintAgents Eval is an evolving toolkit that provides everything you need to:
 - Create multi-agent voice AI simulations with realistic workplace scenarios
