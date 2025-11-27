@@ -135,32 +135,22 @@ def create_gradio_interface(CONVERSATION_SESSIONS, conversation_id):
         silence_counter_state = gr.State(value=0)
         has_speech_state = gr.State(value=False)
 
-        with gr.Column(elem_classes="center-content"):
-            # Agent Avatars Grid
-            with gr.Column(elem_classes="agent-grid-container"):
-                with gr.Row(equal_height=True):
-                    with gr.Column(scale=1, min_width=200):
-                        hr_avatar = gr.HTML(
-                            value=create_agent_avatar("HR Manager"),
-                            label="HR Manager (Main Contact)"
-                        )
-                    with gr.Column(scale=1, min_width=200):
-                        ai_colleague_avatar = gr.HTML(
-                            value=create_agent_avatar("AI Colleague"),
-                            label="AI Colleague"
-                        )
 
-                with gr.Row(equal_height=True):
-                    with gr.Column(scale=1, min_width=200):
-                        it_avatar = gr.HTML(
-                            value=create_agent_avatar("IT Staff"),
-                            label="IT Staff"
-                        )
-                    with gr.Column(scale=1, min_width=200):
-                        manager_avatar = gr.HTML(
-                            value=create_agent_avatar("Line Manager"),
-                            label="Line Manager"
-                        )
+        with gr.Column(elem_classes="center-content"):
+            # Agent Avatars Grid (dynamic)
+            with gr.Column(elem_classes="agent-grid-container"):
+                avatar_components = {}
+                agent_names = list(config.AGENT_PERSONAS.keys())
+                # Display avatars in rows of 2
+                for i in range(0, len(agent_names), 2):
+                    with gr.Row(equal_height=True):
+                        for j in range(2):
+                            if i + j < len(agent_names):
+                                agent_name = agent_names[i + j]
+                                avatar_components[agent_name] = gr.HTML(
+                                    value=create_agent_avatar(agent_name),
+                                    label=agent_name
+                                )
 
             # Audio Response (hidden but functional for autoplay)
             audio_output = gr.Audio(
@@ -172,8 +162,6 @@ def create_gradio_interface(CONVERSATION_SESSIONS, conversation_id):
 
             # Start Fresh Button
             with gr.Column(elem_classes="audio-recorder-container"):
-                
-                # Voice Input              
                 audio_input = gr.Audio(
                     label=" ", # Leave blank
                     sources=["microphone"],
@@ -181,7 +169,6 @@ def create_gradio_interface(CONVERSATION_SESSIONS, conversation_id):
                     streaming=True,
                     elem_id="audio_input",
                 )
-
                 clear_session_btn = gr.Button(
                     "Reset Session", 
                     variant="secondary",
@@ -271,12 +258,10 @@ def create_gradio_interface(CONVERSATION_SESSIONS, conversation_id):
                             hr_manager_agent=config.hr_manager
                         )
                         
-                        # Generate avatars based on active agent
-                        hr_avatar_html = create_agent_avatar("HR Manager", active_agent == "HR Manager")
-                        ai_colleague_avatar_html = create_agent_avatar("AI Colleague", active_agent == "AI Colleague")
-                        it_avatar_html = create_agent_avatar("IT Staff", active_agent == "IT Staff")
-                        manager_avatar_html = create_agent_avatar("Line Manager", active_agent == "Line Manager")
-                        
+                        # Generate avatars based on active agent (dynamic)
+                        avatar_htmls = []
+                        for agent_name in config.AGENT_PERSONAS.keys():
+                            avatar_htmls.append(create_agent_avatar(agent_name, active_agent == agent_name))
                         # Reset states
                         return (
                             [],     # Clear buffer
@@ -284,10 +269,7 @@ def create_gradio_interface(CONVERSATION_SESSIONS, conversation_id):
                             False,  # Reset has_speech
                             gr.update(label=" "),
                             output_audio,
-                            hr_avatar_html,
-                            ai_colleague_avatar_html,
-                            it_avatar_html,
-                            manager_avatar_html
+                            *avatar_htmls
                         )
                     except Exception as e:
                         print(f"Error processing audio: {e}")
@@ -320,6 +302,8 @@ def create_gradio_interface(CONVERSATION_SESSIONS, conversation_id):
                 gr.update()
             )
 
+        # Dynamically set outputs for avatars
+        avatar_output_components = [avatar_components[name] for name in agent_names]
         audio_input.stream(
             fn=detect_silence_and_process,
             inputs=[audio_input, audio_buffer_state, silence_counter_state, has_speech_state, conversation_state],
@@ -329,10 +313,7 @@ def create_gradio_interface(CONVERSATION_SESSIONS, conversation_id):
                 has_speech_state,
                 audio_input,
                 audio_output,
-                hr_avatar,
-                ai_colleague_avatar,
-                it_avatar,
-                manager_avatar
+                *avatar_output_components
             ]
         )
 
@@ -341,12 +322,11 @@ def create_gradio_interface(CONVERSATION_SESSIONS, conversation_id):
             if conversation_id in CONVERSATION_SESSIONS:
                 CONVERSATION_SESSIONS[conversation_id].close()
                 del CONVERSATION_SESSIONS[conversation_id]
+            # Dynamically reset avatars
+            avatar_htmls = [create_agent_avatar(agent_name) for agent_name in config.AGENT_PERSONAS.keys()]
             return (
                 None,
-                create_agent_avatar("HR Manager"),
-                create_agent_avatar("AI Colleague"),
-                create_agent_avatar("IT Staff"),
-                create_agent_avatar("Line Manager"),
+                *avatar_htmls,
                 [],
                 0,
                 False
@@ -357,10 +337,7 @@ def create_gradio_interface(CONVERSATION_SESSIONS, conversation_id):
             inputs=[conversation_state],
             outputs=[
                 audio_output,
-                hr_avatar,
-                ai_colleague_avatar,
-                it_avatar,
-                manager_avatar,
+                *avatar_output_components,
                 audio_buffer_state,
                 silence_counter_state,
                 has_speech_state
