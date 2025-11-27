@@ -48,10 +48,10 @@ def get_or_create_session(conversation_id: str):
     """Get or create a session - SQLiteSession should be imported in notebook"""
     # Note: SQLiteSession import happens in the notebook
     # This function expects CONVERSATION_SESSIONS to be populated
-    if conversation_id not in CONVERSATION_SESSIONS:
+    if conversation_id not in config.CONVERSATION_SESSIONS:
         # Will be handled by notebook initialization
         raise ValueError(f"Session {conversation_id} not found. Initialize sessions in notebook first.")
-    return CONVERSATION_SESSIONS[conversation_id]
+    return config.CONVERSATION_SESSIONS[conversation_id]
 
 async_openai_client = AsyncOpenAI()
 
@@ -154,7 +154,7 @@ async def get_agent_response_with_speech(user_input: str, conversation_id: str =
         if runner is None or hr_manager_agent is None:
             raise ValueError("Runner and hr_manager_agent must be provided")
             
-        CURRENT_TOOL_EXPECTED.clear()
+        config.CURRENT_TOOL_EXPECTED.clear()
         session = get_or_create_session(conversation_id)
         
         agent_result = await runner.run(hr_manager_agent, input=user_input, session=session)
@@ -167,10 +167,10 @@ async def get_agent_response_with_speech(user_input: str, conversation_id: str =
             "content": json.dumps({
                 "evaluation_metadata": True,
                 "responding_agent": agent_name,
-                "expected_response": CURRENT_TOOL_EXPECTED.get("expected", response),
+                "expected_response": config.CURRENT_TOOL_EXPECTED.get("expected", response),
             })
         }])
-        CURRENT_TOOL_EXPECTED.clear()
+        config.CURRENT_TOOL_EXPECTED.clear()
         
         speech_bytes = await generate_speech_async(response, agent_name)
         return response, agent_name, speech_bytes
