@@ -4,7 +4,6 @@ Gradio UI components for StintAgents Voice AI
 import gradio as gr
 import numpy as np
 import random
-from .config import Runner, hr_manager
 from .utils import process_voice_input
 
 import stintagents.config as config
@@ -268,8 +267,8 @@ def create_gradio_interface(CONVERSATION_SESSIONS, conversation_id):
                         output_audio, active_agent = process_voice_input(
                             complete_audio, 
                             conversation_id,
-                            runner=Runner,
-                            hr_manager_agent=hr_manager
+                            runner=config.Runner,
+                            hr_manager_agent=config.hr_manager
                         )
                         
                         # Generate avatars based on active agent
