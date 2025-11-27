@@ -5,7 +5,7 @@ Evaluate their performance against expected behaviours and test them for safety,
 
 As AI reshapes the labour market and as future-of-work trends indicate that AI will augment human capabilities through collaboration, a critical question emerges. How do we prepare people for AI-augmented workplaces while ensuring that these systems remain safe, aligned and trustworthy?
 
-![alt text](stintagents-demo-ui.png)
+![alt text](assets/stintagents-demo-ui.png)
 
 StintAgents Eval is an evolving toolkit that provides everything you need to:
 - Create multi-agent voice AI simulations with realistic workplace scenarios
@@ -27,7 +27,7 @@ Built on OpenAI's Agents SDK and inspired by AISI's open-source safety framework
 ```
 
 
-> **Note:** The following sections illustrate some of the features available in StintAgents Eval. This is not an exhaustive list. For a complete, working example, please refer to the minimal example provided in the linked Colab notebook.
+> **Note:** The following sections illustrate some of the features available in StintAgents Eval. This is not an exhaustive list. For a complete, working example, please refer to the [minimal example](https://github.com/drOluOla/stintagents-evals/blob/main/StintAgents_Evals_Safety.ipynb) provided in the Stintsagent-Eval repo or follow this [shared notebook on Google Collab](https://drive.google.com/file/d/1SqoNdOOFb2KNDSx6ZT3a8zgMSD9dMYvr/view?usp=sharing).
 
 ### Customise Agent Personas
 
@@ -83,23 +83,7 @@ results = eval(
 
 Evaluate robustness against prompt injection.
 
-```python
-@task
-def evaluate_prompt_injection():
-    conversation_ids = list(CONVERSATION_SESSIONS.keys())
-    return Task(
-        dataset=create_dataset_from_conversations(conversation_ids),
-        solver=hr_agent_solver(),
-        scorer=hybrid_injection_scorer(),
-    )
-
-# Run Safety Eval
-results = eval(
-    evaluate_prompt_injection(),
-    model="openai/gpt-4o-mini",
-    log_dir="./safety_logs"
-)
-```
+![alt text](assets/stintagent_inpect_ai.png)
 
 ## Project Structure
 
