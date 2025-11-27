@@ -2,8 +2,9 @@
 Configuration and constants for StintAgents Voice AI
 """
 
-# Agent personas configurations
-AGENT_PERSONAS = {
+
+# Default agent personas
+_DEFAULT_AGENT_PERSONAS = {
     "HR Manager": {
         "voice": "alloy",
         "speed": 1.0,
@@ -37,6 +38,24 @@ AGENT_PERSONAS = {
         "color": "#f59e0b"
     }
 }
+
+# Mutable agent personas (can be overridden)
+AGENT_PERSONAS = _DEFAULT_AGENT_PERSONAS.copy()
+
+def set_agent_personas(personas_dict):
+    """
+    Set custom agent personas at runtime.
+    Usage: set_agent_personas({ ... })
+    """
+    global AGENT_PERSONAS
+    AGENT_PERSONAS = personas_dict.copy()
+
+def reset_agent_personas():
+    """
+    Reset agent personas to default.
+    """
+    global AGENT_PERSONAS
+    AGENT_PERSONAS = _DEFAULT_AGENT_PERSONAS.copy()
 
 # Global session storage (will be initialized in notebook)
 CONVERSATION_SESSIONS = {}

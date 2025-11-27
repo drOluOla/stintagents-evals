@@ -4,28 +4,30 @@ Gradio UI components for StintAgents Voice AI
 import gradio as gr
 import numpy as np
 import random
-from .config import AGENT_PERSONAS, Runner, hr_manager
+from .config import Runner, hr_manager
 from .utils import process_voice_input
+
+import stintagents.config as config
 
 
 def create_agent_avatar(agent_name: str, is_speaking: bool = False) -> str:
     """Generate HTML avatar with visual feedback."""
-    config = AGENT_PERSONAS.get(agent_name, AGENT_PERSONAS["HR Manager"])
+    personas = config.AGENT_PERSONAS
+    agent_cfg = personas.get(agent_name, personas.get("HR Manager", {}))
     border = "box-shadow: 0 0 20px #ff4444; border-color: #ff4444; animation: pulse 1s infinite;" if is_speaking else "box-shadow: 0 0 15px #059669; border-color: #059669;"
     overlay = "#ff444420" if is_speaking else "rgba(255, 255, 255, 0.05)"
-    
     return f"""
     <style>@keyframes pulse {{ 0%, 100% {{ opacity: 1; }} 50% {{ opacity: 0.7; }} }}</style>
     <div style="text-align: center; padding: 20px; border-radius: 15px; 
-                background: linear-gradient(135deg, {config['color']}20, {config['color']}10);
-                border: 3px solid {config['color']}; {border} height: 220px; 
+                background: linear-gradient(135deg, {agent_cfg.get('color', '#059669')}20, {agent_cfg.get('color', '#059669')}10);
+                border: 3px solid {agent_cfg.get('color', '#059669')}; {border} height: 220px; 
                 display: flex; flex-direction: column; justify-content: center; position: relative;">
         <div style="position: absolute; inset: 0; background: {overlay}; z-index: 1;"></div>
         <div style="position: relative; z-index: 2;">
-            <div style="font-size: 4em; margin-bottom: 10px;">{config['emoji']}</div>
+            <div style="font-size: 4em; margin-bottom: 10px;">{agent_cfg.get('emoji', '🤖')}</div>
             <div style="font-weight: bold; font-size: 1.2em; color: #fff;">{agent_name}</div>
-            <div style="color: #666; font-size: 0.9em;">{config['description']}</div>
-            <div style="color: #888; font-size: 0.8em;">{config['specialty']}</div>
+            <div style="color: #666; font-size: 0.9em;">{agent_cfg.get('description', '')}</div>
+            <div style="color: #888; font-size: 0.8em;">{agent_cfg.get('specialty', '')}</div>
         </div>
     </div>"""
 

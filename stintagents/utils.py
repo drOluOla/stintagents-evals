@@ -14,7 +14,7 @@ from faster_whisper import WhisperModel
 from openai import AsyncOpenAI
 from pydub import AudioSegment
 
-from .config import AGENT_VOICES, CONVERSATION_SESSIONS, CURRENT_TOOL_EXPECTED
+import stintagents.config as config
 
 # ==============================================================================
 # EVENT LOOP
@@ -105,12 +105,13 @@ def convert_audio_bytes(audio_bytes: bytes, format: str = "mp3"):
 async def generate_speech_async(text: str, agent_name: str = "HR Manager") -> Optional[bytes]:
     """Generate speech using OpenAI TTS."""
     try:
-        config = AGENT_VOICES.get(agent_name, AGENT_VOICES["HR Manager"])
+        personas = config.AGENT_PERSONAS
+        agent_cfg = personas.get(agent_name, personas.get("HR Manager", {}))
         response = await async_openai_client.audio.speech.create(
             model="gpt-4o-mini-tts",
-            voice=config["voice"],
+            voice=agent_cfg.get("voice", "alloy"),
             input=text,
-            speed=config.get("speed", 1.0),
+            speed=agent_cfg.get("speed", 1.0),
             response_format="mp3"
         )
         return response.content
