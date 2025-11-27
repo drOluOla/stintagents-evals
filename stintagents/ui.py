@@ -12,39 +12,22 @@ import stintagents.config as config
 def create_agent_avatar(agent_name: str, is_speaking: bool = False) -> str:
     """Generate HTML avatar with visual feedback."""
     personas = config.AGENT_PERSONAS
-    agent_cfg = personas.get(agent_name, {})
-    # Use a class for speaking state to ensure animation is not overridden
-    speaking_class = "agent-speaking" if is_speaking else "agent-idle"
+    agent_cfg = personas.get(agent_name, personas.get("HR Manager", {}))
+    border = "box-shadow: 0 0 20px #ff4444; border-color: #ff4444; animation: pulse 1s infinite;" if is_speaking else f"box-shadow: 0 0 15px {agent_cfg.get('color', '#059669')}; border-color: {agent_cfg.get('color', '#059669')};"
     overlay = "#ff444420" if is_speaking else "rgba(255, 255, 255, 0.05)"
-    # Inline style for color fallback
-    color = agent_cfg.get('color', '#059669')
     return f"""
-    <style>
-        @keyframes pulse-border {{
-            0%, 100% {{ box-shadow: 0 0 20px #ff4444, 0 0 0px #ff4444; border-color: #ff4444; }}
-            50% {{ box-shadow: 0 0 10px #ff4444, 0 0 10px #ff4444; border-color: #ff4444; }}
-        }}
-        .agent-speaking {{
-            box-shadow: 0 0 20px #ff4444;
-            border-color: #ff4444 !important;
-            animation: pulse-border 1s infinite;
-        }}
-        .agent-idle {{
-            box-shadow: 0 0 15px {color};
-            border-color: {color} !important;
-        }}
-    </style>
-    <div class="{speaking_class}" style="text-align: center; padding: 20px; border-radius: 15px; 
-                            background: linear-gradient(135deg, {color}20, {color}10);
-                            border: 3px solid {color}; height: 220px; 
-                            display: flex; flex-direction: column; justify-content: center; position: relative; transition: border-color 0.2s;">
-            <div style="position: absolute; inset: 0; background: {overlay}; z-index: 1;"></div>
-            <div style="position: relative; z-index: 2;">
-                    <div style="font-size: 4em; margin-bottom: 10px;">{agent_cfg.get('emoji', '🤖')}</div>
-                    <div style="font-weight: bold; font-size: 1.2em; color: #fff;">{agent_name}</div>
-                    <div style="color: #666; font-size: 0.9em;">{agent_cfg.get('description', '')}</div>
-                    <div style="color: #888; font-size: 0.8em;">{agent_cfg.get('specialty', '')}</div>
-            </div>
+    <style>@keyframes pulse {{ 0%, 100% {{ opacity: 1; }} 50% {{ opacity: 0.7; }} }}</style>
+    <div style="text-align: center; padding: 20px; border-radius: 15px; 
+                background: linear-gradient(135deg, {agent_cfg.get('color', '#059669')}20, {agent_cfg.get('color', '#059669')}10);
+                border: 3px solid {agent_cfg.get('color', '#059669')}; {border} height: 220px; 
+                display: flex; flex-direction: column; justify-content: center; position: relative;">
+        <div style="position: absolute; inset: 0; background: {overlay}; z-index: 1;"></div>
+        <div style="position: relative; z-index: 2;">
+            <div style="font-size: 4em; margin-bottom: 10px;">{agent_cfg.get('emoji', '🤖')}</div>
+            <div style="font-weight: bold; font-size: 1.2em; color: #fff;">{agent_name}</div>
+            <div style="color: #666; font-size: 0.9em;">{agent_cfg.get('description', '')}</div>
+            <div style="color: #888; font-size: 0.8em;">{agent_cfg.get('specialty', '')}</div>
+        </div>
     </div>"""
 
 
