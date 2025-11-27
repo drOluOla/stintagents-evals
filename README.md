@@ -102,6 +102,7 @@ stintagents-evals/
 
 
 ## Known Issues/To Dos:
-- Enhance generation accuracy by integrating advanced retrieval-augmented techniques
-- Implement robust guardrails for content moderation and safety
-- See some in https://github.com/users/drOluOla/projects/3
+- [ ] Enhance generation accuracy by integrating advanced retrieval techniques
+- [ ] Implement robust guardrails for content moderation and safety.
+- [ ] Reduce latency in the voice AI pipeline with better TTS & STT models/logic.
+- [ ] See some in https://github.com/users/drOluOla/projects/3
