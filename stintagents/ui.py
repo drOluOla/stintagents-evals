@@ -12,12 +12,8 @@ import stintagents.config as config
 def create_agent_avatar(agent_name: str, is_speaking: bool = False) -> str:
     """Generate HTML avatar with visual feedback."""
     personas = config.AGENT_PERSONAS
-    agent_cfg = personas.get(agent_name, personas.get("HR Manager", {}))
-    border = (
-        "box-shadow: 0 0 20px #ff4444; border-color: #ff4444; animation: pulse 1s infinite;"
-        if is_speaking
-        else f"box-shadow: 0 0 15px {'#059669' if agent_name == 'HR Manager' else agent_cfg.get('color', '#059669')}; border-color: {'#059669' if agent_name == 'HR Manager' else agent_cfg.get('color', '#059669')};"
-    )
+    agent_cfg = personas.get(agent_name, {})
+    border = "box-shadow: 0 0 20px #ff4444; border-color: #ff4444; animation: pulse 1s infinite;" if is_speaking else "box-shadow: 0 0 15px #059669; border-color: #059669;"
     overlay = "#ff444420" if is_speaking else "rgba(255, 255, 255, 0.05)"
     return f"""
     <style>@keyframes pulse {{ 0%, 100% {{ opacity: 1; }} 50% {{ opacity: 0.7; }} }}</style>
