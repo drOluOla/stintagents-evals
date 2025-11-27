@@ -26,8 +26,8 @@ Built on OpenAI's Agents SDK and inspired by AISI's open-source safety framework
 !pip install git+https://github.com/drOluOla/stintagents-evals.git
 ```
 
-
-> **Note:** The following sections illustrate some of the features available in StintAgents Eval. This is not an exhaustive list. For a complete, working example, please refer to the [minimal example](https://github.com/drOluOla/stintagents-evals/blob/main/StintAgents_Evals_Safety.ipynb) provided in the Stintsagent-Eval repo or follow this [shared notebook on Google Collab](https://drive.google.com/file/d/1SqoNdOOFb2KNDSx6ZT3a8zgMSD9dMYvr/view?usp=sharing).
+> [!NOTE]
+> The following sections illustrate some of the features available in StintAgents Eval. This is not an exhaustive list. For a complete, working example please refer to the [minimal example](https://github.com/drOluOla/stintagents-evals/blob/main/StintAgents_Evals_Safety.ipynb) provided in the Stintsagent-Eval repo or follow the [shared notebook on Google Collab](https://drive.google.com/file/d/1SqoNdOOFb2KNDSx6ZT3a8zgMSD9dMYvr/view?usp=sharing).
 
 ### Customise Agent Personas
 
