@@ -79,27 +79,11 @@ results = eval(
 )
 ```
 
-### Safety Checks
+### Safety Results
 
-Evaluate robustness against prompt injection.
+Evaluate robustness against Social Engineering.
 
 ![alt text](assets/stintagent_inpect_ai.png)
-
-## Project Structure
-
-```
-stintagents-evals/
-├── stintagents/
-│   ├── __init__.py      
-│   ├── config.py        
-│   ├── utils.py         
-│   └── ui.py            
-├── requirements.txt
-├── setup.py
-└── README.md
-```
-
-
 
 ## Known Issues/To Dos:
 - [ ] Enhance generation accuracy by integrating advanced retrieval techniques
