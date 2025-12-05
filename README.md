@@ -1,4 +1,4 @@
-# StintAgents Evals & Safety
+# StintAgents Eval
 
 Build multi-agent voice AI systems with distinct personas for realistic workplace scenarios.
 Evaluate their performance against expected behaviours and test them for safety, all within a Colab or Jupyter notebook.
